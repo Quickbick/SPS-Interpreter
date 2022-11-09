@@ -1,3 +1,6 @@
+# written by Nathanael Ostheller
+# 011717168
+
 from psItems import Value, ArrayValue, FunctionValue
 class Operators:
     def __init__(self):
@@ -16,13 +19,13 @@ class Operators:
         Helper function. Pops the top value from opstack and returns it.
     """
     def opPop(self):
-        pass
+        return self.opstack.pop()
 
     """
        Helper function. Pushes the given value to the opstack.
     """
     def opPush(self,value):
-        pass
+        self.opstack.append(value)
         
     #------- Dict Stack Operators --------------
     
