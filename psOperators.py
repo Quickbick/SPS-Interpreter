@@ -241,7 +241,16 @@ class Operators:
         Pushes the orginal array value back on to the stack. 
     """
     def aload(self):
-        pass
+        if (len(self.opstack) > 0):
+            op = self.opPop()
+            if isinstance(op, ArrayValue):
+                for item in op.value:
+                    self.opPush(item)
+                self.opPush(op)
+            else:
+                print("Error: aload expects an array value")
+        else:
+            print("Error: aload exprects an operand")
         
     """ 
         Pops an array constant (ArrayValue) from the operand stack.  
