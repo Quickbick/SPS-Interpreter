@@ -135,19 +135,43 @@ class Operators:
        Pops the top two values from the opstack; pushes "True" is they are equal, otherwise pushes "False"
     """ 
     def eq(self):
-        pass
+        if len(self.opstack) > 1:
+            op1 = self.opPop()
+            op2 = self.opPop()
+            if (op1 == op2):
+                self.opPush(True)
+            else:
+                self.opPush(False)
+        else:
+            print("Error: eq expects 2 operands") 
 
     """
        Pops the top two values from the opstack; pushes "True" if the bottom value is less than the top value, otherwise pushes "False"
     """ 
     def lt(self):
-        pass
+        if len(self.opstack) > 1:
+            op1 = self.opPop()
+            op2 = self.opPop()
+            if (op1 > op2):
+                self.opPush(True)
+            else:
+                self.opPush(False)
+        else:
+            print("Error: lt expects 2 operands") 
 
     """
        Pops the top two values from the opstack; pushes "True" if the bottom value is greater than the top value, otherwise pushes "False"
     """ 
     def gt(self):
-        pass
+        if len(self.opstack) > 1:
+            op1 = self.opPop()
+            op2 = self.opPop()
+            if (op1 < op2):
+                self.opPush(True)
+            else:
+                self.opPush(False)
+        else:
+            print("Error: gt expects 2 operands") 
 
     # ------- Array Operators --------------
     """ 
