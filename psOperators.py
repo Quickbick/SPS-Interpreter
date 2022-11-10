@@ -102,14 +102,34 @@ class Operators:
         Pops 2 values from opstack; checks if they are numerical (int); multiplies them; and pushes the result back to opstack. 
     """    
     def mul(self):
-        pass
+        if len(self.opstack) > 1:
+            op1 = self.opPop()
+            op2 = self.opPop()
+            if isinstance(op1, int) and isinstance(op2, int):
+                self.opPush(op1 * op2)
+            else:
+                print("Error: one of the operands to mul is not a number value")
+                self.opPush(op2)
+                self.opPush(op1)             
+        else:
+            print("Error: mul expects 2 operands")
 
     """
         Pops 2 values from stack; checks if they are int values; calculates the remainder of dividing the bottom value by the top one; 
         pushes the result back to opstack.
     """ 
     def mod(self):
-        pass
+        if len(self.opstack) > 1:
+            op2 = self.opPop()
+            op1 = self.opPop()
+            if isinstance(op1, int) and isinstance(op2, int):
+                self.opPush(op1 % op2)
+            else:
+                print("Error: one of the operands to mod is not a number value")
+                self.opPush(op1)
+                self.opPush(op2)
+        else:
+            print("Error: mod expects 2 operands") 
     #---------- Comparison Operators  -----------------
     """
        Pops the top two values from the opstack; pushes "True" is they are equal, otherwise pushes "False"
