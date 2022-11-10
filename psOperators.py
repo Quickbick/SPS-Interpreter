@@ -381,25 +381,51 @@ class Operators:
        Pops an integer from the opstack (size argument) and pushes an  empty dictionary onto the opstack.
     """
     def psDict(self):
-        pass
+        if (len(self.opstack) > 0):
+            size = self.opPop()
+            if isinstance(size, int):
+                mt = {}
+                self.opPush(mt)
+            else:
+                print("Error: dict expects an integer operand")
+        else:
+            print("Error: dict requires an operand")
 
     """
        Pops the dictionary at the top of the opstack; pushes it to the dictstack.
     """
     def begin(self):
-        pass
+        if (len(self.opstack) > 0):
+            dic = self.opPop()
+            if isinstance(dic, dict):
+                self.dictPush(dic)
+            else:
+                print("Error: begin expects an dict operand")
+        else:
+            print("Error: begin requires an operand")
 
     """
        Removes the top dictionary from dictstack.
     """
     def end(self):
-        pass
+        if (len(self.dictstack) > 0):
+            self.dictPop()
+        else:
+            print("Error: end requires an operand")
         
     """
        Pops a name and a value from opstack, adds the name:value pair to the top dictionary by calling define.  
     """
     def psDef(self):
-        pass
+        if (len(self.opstack) > 1):
+            value = self.opPop()
+            name = self.opPop()
+            if isinstance(name, str) and name[0] == '/':
+                self.define(name, value)
+            else:
+                print("Error: def expects a name and a value")
+        else:
+            print("Error: def requires two operands")
 
 
     # ------- if/ifelse Operators --------------
