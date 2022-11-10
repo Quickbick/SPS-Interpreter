@@ -59,8 +59,8 @@ class Operators:
     def lookup(self,name):
         revList = reversed(self.dictstack)
         for dict in revList:
-            if ('/' + name) in dict:
-                return dict[name]
+            if ("/" + name) in dict:
+                return dict[("/" + name)]
         print("ERROR: Value does not exist to be looked up")
         return None
     
@@ -179,7 +179,14 @@ class Operators:
        The `length` method should support ArrayValue values.
     """
     def length(self):
-        pass
+        if len(self.opstack) > 0:
+            op1 = self.opPop()
+            if isinstance(op1, ArrayValue):
+                self.opPush(len(op1.value))
+            else:
+                print("Error: the operand is not an array value")
+        else:
+            print("Error: len exprect an operand")
 
     """ 
         Pops the `count` (int), an (zero-based) start `index`, and an array constant (ArrayValue) from the operand stack.  
@@ -187,7 +194,22 @@ class Operators:
         If the end index of the slice goes beyond the array length, will give an error. 
     """
     def getinterval(self):
-        pass
+        if len(self.opstack) > 2:
+            count = self.opPop()
+            inx = self.opPop()
+            array = self.opPop()
+            if isinstance(count, int) and isinstance(inx, int) and isinstance(array, ArrayValue):
+                if (inx + count) <= len(array.value):
+                    newArray = []
+                    for x in range(count):
+                        newArray.append(array.value[inx + x])
+                    self.opPush(ArrayValue(newArray))
+                else:
+                    print("Error: subsection of array goes outside of given array bounds")
+            else:
+                print("Error: getinterval expects 2 ints and an array value")
+        else:
+            print("Error: getinterval exprects 3 operands")
 
     """ 
         Pops an array constant (ArrayValue), start `index` (int), and another array constant (ArrayValue) from the operand stack.  
@@ -196,7 +218,21 @@ class Operators:
         The index is 0-based. If the end index of the slice goes beyond the array length, will give an error. 
     """
     def putinterval(self):
-        pass
+        if len(self.opstack) > 2:
+            arr1 = self.opPop()
+            inx = self.opPop()
+            arr2 = self.opPop()
+            if isinstance(arr1, ArrayValue) and isinstance(inx, int) and isinstance(arr2, ArrayValue):
+                if (inx + len(arr1.value)) <= len(arr2.value):
+                    for item in arr1.value:
+                        arr2.value[inx] = item
+                        inx = inx + 1
+                else:
+                    print("Error: subsection of array goes outside of given array bounds")
+            else:
+                print("Error: getinterval expects 2 array values and an int")
+        else:
+            print("Error: putinterval exprects 3 operands")
             
 
     """ 
