@@ -259,7 +259,20 @@ class Operators:
         Pushes the array value back onto the operand stack. 
     """
     def astore(self):
-        pass
+        if (len(self.opstack) > 0):
+            array = self.opPop()
+            if isinstance(array, ArrayValue):
+                if (len(self.opstack) >= len(array.value)):
+                    for x in range(len(array.value)):
+                        array.value[x] = self.opPop()
+                    array.value.reverse()
+                    self.opPush(array)
+                else:
+                    print("Error: not enough items to fill array")
+            else:
+                print("Error: aload expects an array value")
+        else:
+            print("Error: astore exprects an operand")
 
     #------- Stack Manipulation and Print Operators --------------
 
