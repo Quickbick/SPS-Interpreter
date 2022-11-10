@@ -21,7 +21,7 @@ class HW4Sampletests_part1(unittest.TestCase):
         self.assertEqual(self.psstacks.lookup('x'),10)
         self.assertEqual(self.psstacks.lookup('v'),5)
 
-    def testLookup2(self):
+    def test_lookup2(self):
         self.psstacks.dictPush({'/a':355})
         arrayV = ArrayValue([3,5,5])
         self.psstacks.dictPush({'/a':arrayV})

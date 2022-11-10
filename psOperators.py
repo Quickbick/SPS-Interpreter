@@ -33,20 +33,23 @@ class Operators:
        Helper function. Pops the top dictionary from dictstack and returns it.
     """   
     def dictPop(self):
-        pass
+        return self.dictstack.pop()
 
     """
        Helper function. Pushes the given dictionary onto the dictstack. 
     """   
     def dictPush(self,d):
-        pass
+        self.dictstack.append(d)
 
     """
        Helper function. Adds name:value pair to the top dictionary in the dictstack.
        (Note: If the dictstack is empty, first adds an empty dictionary to the dictstack then adds the name:value to that. 
     """   
     def define(self,name, value):
-        pass
+        if (len(self.dictstack) == 0):
+            newDict = {}
+            self.dictstack.append(newDict)
+        self.dictstack[-1][name] = value    
 
     """
        Helper function. Searches the dictstack for a variable or function and returns its value. 
@@ -54,7 +57,12 @@ class Operators:
         Make sure to add '/' to the begining of the name.)
     """
     def lookup(self,name):
-        pass
+        revList = reversed(self.dictstack)
+        for dict in revList:
+            if ('/' + name) in dict:
+                return dict[name]
+        print("ERROR: Value does not exist to be looked up")
+        return None
     
     #------- Arithmetic Operators --------------
     
@@ -65,7 +73,7 @@ class Operators:
         if len(self.opstack) > 1:
             op1 = self.opPop()
             op2 = self.opPop()
-            if isinstance(op1,int) and isinstance(op2,int):
+            if isinstance(op1, int) and isinstance(op2, int):
                 self.opPush(op1 + op2)
             else:
                 print("Error: add - one of the operands is not a number value")
@@ -78,7 +86,17 @@ class Operators:
        Pop 2 values from opstack; checks if they are numerical (int); subtracts them; and pushes the result back to opstack. 
     """   
     def sub(self):
-        pass
+        if len(self.opstack) > 1:
+            op2 = self.opPop()
+            op1 = self.opPop()
+            if isinstance(op1, int) and isinstance(op2, int):
+                self.opPush(op1 - op2)
+            else:
+                print("Error: one of the operands to sub is not a number value")
+                self.opPush(op1)
+                self.opPush(op2)
+        else:
+            print("Error: sub expects 2 operands")    
 
     """
         Pops 2 values from opstack; checks if they are numerical (int); multiplies them; and pushes the result back to opstack. 
