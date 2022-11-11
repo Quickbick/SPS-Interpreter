@@ -10,9 +10,13 @@ class Operators:
         
         #The builtin operators supported by our interpreter
         self.builtin_operators = {
-             # TO-DO in part1
-             # include the key value pairs where he keys are the PostScrip opertor names and the values are the function values that implement that operator. 
-             # Make sure **not to call the functions** 
+             "add":self.add, "sub":self.sub, "mul":self.mul, "mod":self.mod, "eq":self.eq, "lt":self.lt,
+             "gt":self.gt, "length":self.length, "getinterval":self.getinterval,
+             "putinterval":self.putinterval, "aload":self.aload, "astore":self.astore, "if":self.psIf,
+             "ifelse":self.psIfelse, "repeat":self.repeat, "dup":self.dup, "copy":self.copy,
+             "count":self.count, "pop":self.pop, "clear":self.clear, "exch":self.exch, "roll":self.roll,
+             "stack":self.stack, "dict":self.psDict, "begin":self.begin, "end":self.end, "def":self.psDef,
+             "stack":self.stack 
         }
     #-------  Operand Stack Operators --------------
     """
