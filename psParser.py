@@ -101,13 +101,14 @@ def read_expr(src):
     token = src.pop_first()
     if token is None:
         raise SyntaxError('Incomplete expression')
-    # TO-DO  - complete the following; include each condition as an `elif` case.
-    #   if the token is a literal return a `Literal` object having `value` token.
-    #   if the token is a name, create a Name object having `var_name` token. 
-    #   if the token is an array delimiter (i.e., '['), get all tokens until the matching ']' delimiter and combine them as a Python list; 
-    #       create a Array object having this list value. You can use the read_block_expr function defined above. 
-    #   if the token is a code-array delimiter (i.e., '{'), get all tokens until the matching '}' delimiter and combine them as a Python list; 
-    #       create a Block object having this list value.  You can use the read_block_expr function defined above.      
+    elif (token == '['): #if list delimiter create Array object
+        return Array.__init__(read_block_expr(src, ']'))
+    elif (token == '{'): #if code block delimiter create block object
+        return Block.__init__(read_block_expr(src, '}'))
+    elif (token is int or token is float or token is bool): #if literal create literal object
+        return Literal.__init__(token)
+    elif (token is string): #if name create name object
+        return Name.__init__(token)   
     else:
         raise SyntaxError("'{}' is not the start of an expression".format(token))
   

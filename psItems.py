@@ -40,7 +40,7 @@ class Expr:
 
 class Literal(Expr):
     """A literal is notation for representing a primitive constant value in code. 
-    In our interpreter, a `Literal` evaluates to a number (int or float) or a boolen. The evaluated value is pushed onto the stack. 
+    In our interpreter, a `Literal` evaluates to a number (int or float) or a boolean. The evaluated value is pushed onto the stack. 
     The `value` attribute contains the fixed value the `Literal` refers to.
     """
     def __init__(self, value):
