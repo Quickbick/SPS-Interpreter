@@ -48,8 +48,14 @@ class Literal(Expr):
         self.value = value
 
     def evaluate(self, psstacks):
-        "TO-DO (part2)"
-        pass
+        if (self.__str__ == 'True'):
+            psstacks.push(True)
+        elif (self.__str__ == 'False'):
+            psstacks.push(False)
+        elif (self.value.isnumeric()):
+            psstacks.push(int(self.value))
+        else:
+            psstacks.push(float(self.value))
 
     def __str__(self):
         return str(self.value)

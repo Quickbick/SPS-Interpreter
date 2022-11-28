@@ -105,9 +105,9 @@ def read_expr(src):
         return Array.__init__(read_block_expr(src, ']'))
     elif (token == '{'): #if code block delimiter create block object
         return Block.__init__(read_block_expr(src, '}'))
-    elif (token is int or token is float or token is bool): #if literal create literal object
+    elif (is_literal(token) == True): #if literal create literal object
         return Literal.__init__(token)
-    elif (token is string): #if name create name object
+    elif (is_name(token) == True): #if name create name object
         return Name.__init__(token)   
     else:
         raise SyntaxError("'{}' is not the start of an expression".format(token))
