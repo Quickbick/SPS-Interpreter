@@ -451,8 +451,13 @@ class Operators:
        If the condition is True, evaluate `ifbody`, otherwise evaluate `elsebody`. 
     """
     def psIfelse(self):
-        pass
-        # TO-DO in part2
+        elsebody = self.opPop()
+        ifbody = self.opPop()
+        condition = self.opPop()
+        if (condition == True):
+            ifbody.apply(self)
+        else:
+            elsebody.apply(self)
 
 
     #------- Loop Operators --------------
