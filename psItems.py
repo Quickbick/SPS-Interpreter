@@ -67,9 +67,11 @@ class Array(Expr):
     #needs to be updated
     def evaluate(self,psstacks):
         newArray = []
+        startCount = len(psstacks.opstack)
         while (len(self.value) != 0):
             self.value.pop(0).evaluate(psstacks)
-            newArray.append(psstacks.opPop())
+        while (len(psstacks.opstack) > startCount):
+            newArray.append(psstacks.opstack.pop(startCount))
         newArrayValue = ArrayValue(newArray)
         psstacks.opPush(newArrayValue)
 
