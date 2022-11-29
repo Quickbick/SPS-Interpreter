@@ -16,7 +16,7 @@ class Operators:
              "ifelse":self.psIfelse, "repeat":self.repeat, "dup":self.dup, "copy":self.copy,
              "count":self.count, "pop":self.pop, "clear":self.clear, "exch":self.exch, "roll":self.roll,
              "stack":self.stack, "dict":self.psDict, "begin":self.begin, "end":self.end, "def":self.psDef,
-             "stack":self.stack 
+             "stack":self.stack, "forall":self.forall 
         }
     #-------  Operand Stack Operators --------------
     """
@@ -494,8 +494,17 @@ class Operators:
        Will be completed in part-2. 
     """ 
     def forall(self):
-        pass
-        # TO-DO in part2
+        if (len(self.opstack) > 1):
+            codearray = self.opPop()
+            array = self.opPop()
+            if isinstance(codearray, FunctionValue) and isinstance(array, ArrayValue):
+                for item in array.value:
+                    self.opPush(item)
+                    codearray.apply(self)
+            else:
+                print("Error: forall requires a body and an array")
+        else:
+            print("Error: forall requires 2 operands")
 
     #--- used in the setup of unittests 
     def clearBoth(self):
