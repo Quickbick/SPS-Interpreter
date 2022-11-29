@@ -439,10 +439,13 @@ class Operators:
        If the condition is True, evaluates the `ifbody`.  
     """
     def psIf(self):
-        ifbody = self.opPop()
-        condition = self.opPop()
-        if (condition == True):
-            ifbody.apply(self)
+        if (len(self.opstack) > 1):
+            ifbody = self.opPop()
+            condition = self.opPop()
+            if (condition == True):
+                ifbody.apply(self)
+        else:
+            print("Error: if requires two operands")
         
 
     """
@@ -451,13 +454,16 @@ class Operators:
        If the condition is True, evaluate `ifbody`, otherwise evaluate `elsebody`. 
     """
     def psIfelse(self):
-        elsebody = self.opPop()
-        ifbody = self.opPop()
-        condition = self.opPop()
-        if (condition == True):
-            ifbody.apply(self)
+        if (len(self.opstack) > 2):
+            elsebody = self.opPop()
+            ifbody = self.opPop()
+            condition = self.opPop()
+            if (condition == True):
+                ifbody.apply(self)
+            else:
+                elsebody.apply(self)
         else:
-            elsebody.apply(self)
+            print("Error: ifelse requires 3 operands")
 
 
     #------- Loop Operators --------------
@@ -468,8 +474,18 @@ class Operators:
        Will be completed in part-2. 
     """  
     def repeat(self):
-        pass
-        #TO-DO in part2
+        if (len(self.opstack) > 1):
+            loopBody = self.opPop()
+            count = self.opPop()
+            if isinstance(loopBody, FunctionValue) and isinstance(count, int):
+                for x in range(count):
+                    loopBody.apply(self)
+            else:
+                print("Error: repeat requires a body and an integer")
+        else:
+            print("Error: repeat requires two operands")
+
+
         
     """
        Implements forall operator.   
