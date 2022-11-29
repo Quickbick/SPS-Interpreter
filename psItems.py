@@ -49,13 +49,13 @@ class Literal(Expr):
 
     def evaluate(self, psstacks):
         if (self.__str__ == 'True'):
-            psstacks.push(True)
+            psstacks.opstack.push(True)
         elif (self.__str__ == 'False'):
-            psstacks.push(False)
+            psstacks.opstack.push(False)
         elif (self.value.isnumeric()):
-            psstacks.push(int(self.value))
+            psstacks.opstack.push(int(self.value))
         else:
-            psstacks.push(float(self.value))
+            psstacks.opstack.push(float(self.value))
 
     def __str__(self):
         return str(self.value)
@@ -94,8 +94,19 @@ class Name(Expr):
         self.var_name = var_name
 
     def evaluate(self,psstacks):
-        "TO-DO (part2)"
-        pass     
+        if (self.var_name[0] == '/'):
+            psstacks.opstack.push(str(self.var_name))
+        elif (self.var_name in psstacks.builtin_operators.keys()):
+            psstacks.builtin_operators[self.var_name]
+        else:
+            resultOfName = psstacks.lookup(self.var_name)
+            if (resultOfName != None):
+                if(type(resultOfName) == FunctionValue):
+                    resultOfName.apply()
+                else:
+                    psstacks.opstack.push(resultOfName)
+
+            
 
     def __str__(self):
         return str(self.var_name)
