@@ -477,3 +477,8 @@ class Operators:
     def clearBoth(self):
         self.opstack[:] = []
         self.dictstack[:] = []
+
+    def cleanTop(self): 
+        if len(self.opstack)>1: 
+            if self.opstack[-1] is None: 
+                self.opstack.pop() 

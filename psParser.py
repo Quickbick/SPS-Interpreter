@@ -102,13 +102,17 @@ def read_expr(src):
     if token is None:
         raise SyntaxError('Incomplete expression')
     elif (token == '['): #if list delimiter create Array object
-        return Array.__init__(read_block_expr(src, ']'))
+        newArray = Array(read_block_expr(src, ']'))
+        return newArray
     elif (token == '{'): #if code block delimiter create block object
-        return Block.__init__(read_block_expr(src, '}'))
+        newBlock = Block(read_block_expr(src, '}'))
+        return newBlock
     elif (is_literal(token) == True): #if literal create literal object
-        return Literal.__init__(token)
+        newLiteral = Literal(token)
+        return newLiteral
     elif (is_name(token) == True): #if name create name object
-        return Name.__init__(token)   
+        newName = Name(token)
+        return newName 
     else:
         raise SyntaxError("'{}' is not the start of an expression".format(token))
   

@@ -48,14 +48,7 @@ class Literal(Expr):
         self.value = value
 
     def evaluate(self, psstacks):
-        if (self.__str__ == 'True'):
-            psstacks.opstack.push(True)
-        elif (self.__str__ == 'False'):
-            psstacks.opstack.push(False)
-        elif (self.value.isnumeric()):
-            psstacks.opstack.push(int(self.value))
-        else:
-            psstacks.opstack.push(float(self.value))
+        psstacks.opPush(self.value)
 
     def __str__(self):
         return str(self.value)
@@ -73,8 +66,12 @@ class Array(Expr):
 
     #needs to be updated
     def evaluate(self,psstacks):
-        "TO-DO (part2)"
-        pass
+        newArray = []
+        while (len(self.value) != 0):
+            self.value.pop(0).evaluate(psstacks)
+            newArray.append(psstacks.opPop())
+        newArrayValue = ArrayValue(newArray)
+        psstacks.opPush(newArrayValue)
 
     def __str__(self):
         return str(self.value)
@@ -95,16 +92,16 @@ class Name(Expr):
 
     def evaluate(self,psstacks):
         if (self.var_name[0] == '/'):
-            psstacks.opstack.push(str(self.var_name))
+            psstacks.opPush(str(self.var_name))
         elif (self.var_name in psstacks.builtin_operators.keys()):
-            psstacks.builtin_operators[self.var_name]
+            psstacks.builtin_operators[self.var_name]()
         else:
             resultOfName = psstacks.lookup(self.var_name)
             if (resultOfName != None):
                 if(type(resultOfName) == FunctionValue):
                     resultOfName.apply()
                 else:
-                    psstacks.opstack.push(resultOfName)
+                    psstacks.opPush(resultOfName)
 
             
 
