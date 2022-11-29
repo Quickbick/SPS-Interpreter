@@ -439,8 +439,11 @@ class Operators:
        If the condition is True, evaluates the `ifbody`.  
     """
     def psIf(self):
-        pass
-        # TO-DO in part2
+        ifbody = self.opPop()
+        condition = self.opPop()
+        if (condition == True):
+            ifbody.apply(self)
+        
 
     """
        Implements ifelse operator. 

@@ -101,7 +101,7 @@ class Name(Expr):
             resultOfName = psstacks.lookup(self.var_name)
             if (resultOfName != None):
                 if(type(resultOfName) == FunctionValue):
-                    resultOfName.apply()
+                    resultOfName.apply(psstacks)
                 else:
                     psstacks.opPush(resultOfName)
 
@@ -124,8 +124,11 @@ class Block(Expr):
         self.value = value
 
     def evaluate(self, psstacks):
-        "TO-DO (part2)"
-        pass
+        newArray = []
+        while (len(self.value) > 0):
+            newArray.append(self.value.pop(0))
+        newFunction = FunctionValue(newArray)
+        psstacks.opPush(newFunction)
 
     def __str__(self):
         return str(self.value)
@@ -201,8 +204,8 @@ class FunctionValue(Value):
         self.body = body
 
     def apply(self, psstacks):
-        # TO-DO in part2
-        pass
+        for expression in self.body:
+            expression.evaluate(psstacks)
 
     def __str__(self):
         return '<function {}>'.format(self.body)
