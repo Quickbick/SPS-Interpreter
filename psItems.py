@@ -105,8 +105,6 @@ class Name(Expr):
                 else:
                     psstacks.opPush(resultOfName)
 
-            
-
     def __str__(self):
         return str(self.var_name)
     
