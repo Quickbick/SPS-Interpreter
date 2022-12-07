@@ -11,27 +11,31 @@ import sys
 from psParser import read
 from psOperators import Operators
 
-
 # program start
 if __name__ == '__main__':
     """Run a read-eval-print loop.
-    `python3 repl.py` to start an interactive REPL.
-    `python3 repl.py --read` to interactively read expressions and
-      print their Python representations.
+    `python3 repl.py` to start an interactive REPL using dynamic scoping.
+    `python3 repl.py --static` to start an interactive REPL using dynamic scoping.
+    `python3 repl.py --read` to interactively read expressions and print their Python representations.
     """
-    read_only = len(sys.argv) == 2 and sys.argv[1] == '--read'
+    static = len(sys.argv) >= 2 and ('--static' in sys.argv)
+    read_only = len(sys.argv) >= 2 and ('--read' in sys.argv)
+
     #create the PostScript stacks
-    psstacks = Operators()
+    if static:
+        psstacks = Operators("static")
+    else:
+        psstacks = Operators("dynamic")
     while True:
         try:
             # `input` prints the prompt, waits, and returns the user's input.
-            user_input = input('<sps> ')
-            expr_list = read(user_input)  # READ
-            for expr in expr_list:        
+            user_input = input('<ssps> ')
+            expr_list = read(user_input)
+            for expr in expr_list:
                 if read_only:
                     print(repr(expr))
                 else:
-                    expr.evaluate(psstacks)   # EVALUATE
+                    expr.evaluate(psstacks)
                 psstacks.cleanTop()
             #print('opstack ', psstacks.opstack)
             #print('dictstack ' , psstacks.dictstack)

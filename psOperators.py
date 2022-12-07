@@ -3,10 +3,11 @@
 
 from psItems import Value, ArrayValue, FunctionValue
 class Operators:
-    def __init__(self):
+    def __init__(self, scoperule):
         #stack variables
         self.opstack = []  #assuming top of the stack is the end of the list
         self.dictstack = []  #assuming top of the stack is the end of the list
+        self.scope = scoperule
         
         #The builtin operators supported by our interpreter
         self.builtin_operators = {
@@ -15,8 +16,7 @@ class Operators:
              "putinterval":self.putinterval, "aload":self.aload, "astore":self.astore, "if":self.psIf,
              "ifelse":self.psIfelse, "repeat":self.repeat, "dup":self.dup, "copy":self.copy,
              "count":self.count, "pop":self.pop, "clear":self.clear, "exch":self.exch, "roll":self.roll,
-             "stack":self.stack, "dict":self.psDict, "begin":self.begin, "end":self.end, "def":self.psDef,
-             "stack":self.stack, "forall":self.forall 
+             "stack":self.stack, "def":self.psDef, "stack":self.stack, "forall":self.forall 
         }
     #-------  Operand Stack Operators --------------
     """
@@ -62,11 +62,15 @@ class Operators:
     """
     def lookup(self,name):
         revList = reversed(self.dictstack)
-        for dict in revList:
-            if ("/" + name) in dict:
-                return dict[("/" + name)]
-        print("ERROR: Value does not exist to be looked up")
-        return None
+        if (self.scope == "static"):
+            revlist.head
+        else:
+            for dict in revList:
+                if ("/" + name) in dict:
+                    return dict[("/" + name)]
+            print("ERROR: Value does not exist to be looked up")
+            return None
+
     
     #------- Arithmetic Operators --------------
     
@@ -381,42 +385,6 @@ class Operators:
         else:
             print("Error: roll requires two operands")
 
-    """
-       Pops an integer from the opstack (size argument) and pushes an  empty dictionary onto the opstack.
-    """
-    def psDict(self):
-        if (len(self.opstack) > 0):
-            size = self.opPop()
-            if isinstance(size, int):
-                mt = {}
-                self.opPush(mt)
-            else:
-                print("Error: dict expects an integer operand")
-        else:
-            print("Error: dict requires an operand")
-
-    """
-       Pops the dictionary at the top of the opstack; pushes it to the dictstack.
-    """
-    def begin(self):
-        if (len(self.opstack) > 0):
-            dic = self.opPop()
-            if isinstance(dic, dict):
-                self.dictPush(dic)
-            else:
-                print("Error: begin expects an dict operand")
-        else:
-            print("Error: begin requires an operand")
-
-    """
-       Removes the top dictionary from dictstack.
-    """
-    def end(self):
-        if (len(self.dictstack) > 0):
-            self.dictPop()
-        else:
-            print("Error: end requires an operand")
-        
     """
        Pops a name and a value from opstack, adds the name:value pair to the top dictionary by calling define.  
     """
