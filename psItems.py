@@ -98,7 +98,7 @@ class Name(Expr):
         elif (self.value in psstacks.builtin_operators.keys()):
             psstacks.builtin_operators[self.value]()
         else:
-            resultOfName = psstacks.lookup(self.var_name)
+            resultOfName = psstacks.lookup(self.value)
             if (resultOfName != None):
                 if(type(resultOfName) == FunctionValue):
                     link = psstacks.defineHelper(self.value)

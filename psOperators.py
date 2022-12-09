@@ -59,25 +59,18 @@ class Operators:
         self.dictPush(link, jdict)
 
     def defineHelper(self, name):
-        if (len(self.dictstack) == 0):
+        if len(self.dictstack) == 0:
             return 0
-        current = self.dictstack[-1]
-        if name in current[1]:
-            return current[0]
-        if (self.scope == 'static'):
-            if ("/" + name) in current[1]:
-                return current[0]
-            while (self.dictstack[current[0]] != None) and (self.dictstack[current[0]] != current):
-                current = self.dictstack[current[0]]
-                if ("/" + name) in current[1]:
-                    return current[0]
-        elif (self.scope == 'dynamic'):
-            revlist = reversed(self.dictstack)
-            for (link, dict) in revlist:
-                if ("/" + name) in dict:
-                    return link
+        tup = self.dictstack[-1]
+        if name in tup[1]:
+            return tup[0]
+        previous = -1
+        while previous != tup[0] and tup[0] != None:
+            previous = tup[0]
+            tup = self.dictstack[tup[0]]
+            if name in tup[1]:
+                return tup[0]
         return 0
-
 
     """
        Helper function. Searches the dictstack for a variable or function and returns its value. 
@@ -85,19 +78,22 @@ class Operators:
         Make sure to add '/' to the begining of the name.)
     """
     def lookup(self,name):
-        current = self.dictstack[-1]
-        if (self.scope == 'static'):
-            if ("/" + name) in current[1]:
-                return current[1][name]
-            while (self.dictstack[current[0]] != None) and (self.dictstack[current[0]] != current):
-                current = self.dictstack[current[0]]
-                if ("/" + name) in current[1]:
-                    return current[1][name]
+        name = ('/' + name)
+        previous = -1
+        if self.scope == 'static':
+            tup = self.dictstack[-1]
+            if name in tup[1]:
+                return tup[1][name]
+            while previous != tup[0] and tup[0] != None:
+                previous = tup[0]
+                tup = self.dictstack[tup[0]]
+                if name in tup[1]:
+                    return tup[1][name]       
         elif (self.scope == 'dynamic'):
             revList = reversed(self.dictstack)
             for (link, dict) in revList:
-                if ("/" + name) in dict:
-                    return dict[("/" + name)]
+                if (name) in dict.keys():
+                    return dict[(name)]
         print("ERROR: Value does not exist to be looked up")
         return None
 
@@ -333,7 +329,7 @@ class Operators:
         print("===**dictstack**===")
         m = 0
         for (link, item) in reversed(self.dictstack):
-            print("{----" + m + "----"  + link + "----}")
+            print("{----" + str(m) + "----"  + str(link) + "----}")
             for key in item.keys():
                 print(key, item[key])
             m = m + 1
