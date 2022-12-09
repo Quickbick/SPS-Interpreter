@@ -80,7 +80,7 @@ class Operators:
     def lookup(self,name):
         name = ('/' + name)
         previous = -1
-        if self.scope == 'static':
+        if (self.scope == 'static'):
             tup = self.dictstack[-1]
             if name in tup[1]:
                 return tup[1][name]

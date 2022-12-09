@@ -78,12 +78,37 @@ testinput8 = """
     B
     """
 
+testinput9 = """
+    /x 10 def
+    /func { x dynamic } def
+    /new { /x 14 def func } def
+    func
 """
- ***** ADD YOUR TESTS HERE  *****
+
+testinput10 = """
+    /x 35 def
+    /new 1 def
+    /func { /x 25 def new } def
+        { /new 1 def
+            /func2 { func2 new stack } def
+            new x
+            func
+            x
+            func2
+        } def
+    new
+"""
+
+testinput11 = """
+    /x 45 def
+    /A { x } def
+    /C { /x 600 def A stack } def
+    /B { /x 25 def /C { x 2 mul } def A } def
+    C
 """
 
 """ Make sure to add your test inputs to the below list as well!"""
-tests = [testinput1,testinput2,testinput3,testinput4,testinput5,testinput6,testinput7,testinput8]
+tests = [testinput1,testinput2,testinput3,testinput4,testinput5,testinput6,testinput7,testinput8,testinput9,testinput10,testinput11]
 
 # program start
 if __name__ == '__main__':
