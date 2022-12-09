@@ -51,8 +51,7 @@ class Operators:
     """   
     def define(self,name, value):
         if (len(self.dictstack) == 0):
-            newDict = {}
-            self.dictPush(0, newDict)
+            self.dictPush(0, {})
         dict = self.dictPop()
         dict[1][name] = value
         jdict = dict[1]
@@ -77,6 +76,7 @@ class Operators:
             for (link, dict) in revlist:
                 if ("/" + name) in dict:
                     return link
+        return 0
 
 
     """

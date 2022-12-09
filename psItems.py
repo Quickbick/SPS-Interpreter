@@ -96,12 +96,12 @@ class Name(Expr):
         if (self.value[0] == '/'):
             psstacks.opPush(str(self.value))
         elif (self.value in psstacks.builtin_operators.keys()):
-            psstacks.builtin_operators[self.var_name]()
+            psstacks.builtin_operators[self.value]()
         else:
-            resultOfName = psstacks.lookup(self.value)
+            resultOfName = psstacks.lookup(self.var_name)
             if (resultOfName != None):
                 if(type(resultOfName) == FunctionValue):
-                    link = psstacks.defineHelper(self.var_name)
+                    link = psstacks.defineHelper(self.value)
                     psstacks.dictPush(link, {})
                     resultOfName.apply(psstacks)
                     psstacks.dictPop()
@@ -125,11 +125,13 @@ class Block(Expr):
         self.value = value
 
     def evaluate(self, psstacks):
-        newArray = []
-        while (len(self.value) > 0):
-            newArray.append(self.value.pop(0))
-        newFunction = FunctionValue(newArray)
-        psstacks.opPush(newFunction)
+        codeArray = FunctionValue(self.value)
+        psstacks.opPush(codeArray)
+        ##newArray = []
+        ##while (len(self.value) > 0):
+        ##    newArray.append(self.value.pop(0))
+        ##newFunction = FunctionValue(newArray)
+        ##psstacks.opPush(newFunction)
 
     def __str__(self):
         return str(self.value)
