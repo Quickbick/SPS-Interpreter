@@ -42,8 +42,8 @@ class Operators:
     """
        Helper function. Pushes the given dictionary onto the dictstack. 
     """   
-    def dictPush(self,d):
-        self.dictstack.append(d)
+    def dictPush(self,link, d):
+        self.dictstack.append(link, d)
 
     """
        Helper function. Adds name:value pair to the top dictionary in the dictstack.
@@ -52,8 +52,32 @@ class Operators:
     def define(self,name, value):
         if (len(self.dictstack) == 0):
             newDict = {}
-            self.dictstack.append(newDict)
-        self.dictstack[-1][name] = value    
+            self.dictstack.append((0, newDict))
+        dict = self.dictPop()
+        dict[1][name] = value
+        jdict = dict[1]
+        link = self.defineHelper(name)
+        self.dictPush(link, jdict)
+
+    def defineHelper(self, name):
+        if (len(self.dictstack) == 0):
+            return 0
+        current = self.dictstack[-1]
+        if name in current[1]:
+            return current[0]
+        if (self.scope == 'static'):
+            if ("/" + name) in current[1]:
+                return current[0]
+            while (self.dictstack[current[0]] != None) and (self.dictstack[current[0]] != current):
+                current = self.dictstack[current[0]]
+                if ("/" + name) in current[1]:
+                    return current[0]
+        elif (self.scope == 'dynamic'):
+            revlist = reversed(self.dictstack)
+            for (link, dict) in revlist:
+                if ("/" + name) in dict:
+                    return link
+
 
     """
        Helper function. Searches the dictstack for a variable or function and returns its value. 
@@ -303,8 +327,17 @@ class Operators:
        Prints the opstack. The end of the list is the top of the stack. 
     """
     def stack(self):
+        print("===**opstack**===")
         for item in reversed(self.opstack):
             print(item)
+        print("===**dictstack**===")
+        m = 0
+        for (link, item) in reversed(self.dictstack):
+            print("{----" + m + "----"  + link + "----}")
+            for key in item.keys():
+                print(key, item[key])
+            m = m + 1
+        print("=================")
 
     """
        Copies the top element in opstack.
@@ -394,7 +427,7 @@ class Operators:
     """
        Pops a name and a value from opstack, adds the name:value pair to the top dictionary by calling define.  
     """
-    def psDef(self):
+    def psDef(self): 
         if (len(self.opstack) > 1):
             value = self.opPop()
             name = self.opPop()
@@ -414,10 +447,12 @@ class Operators:
     """
     def psIf(self):
         if (len(self.opstack) > 1):
+            self.dictPush(self.dictstack.count - 1, {})
             ifbody = self.opPop()
             condition = self.opPop()
             if (condition == True):
                 ifbody.apply(self)
+            self.dictPop()
         else:
             print("Error: if requires two operands")
         
@@ -452,8 +487,10 @@ class Operators:
             loopBody = self.opPop()
             count = self.opPop()
             if isinstance(loopBody, FunctionValue) and isinstance(count, int):
+                self.dictPush(self.dictstack.count - 1, {})
                 for x in range(count):
                     loopBody.apply(self)
+                self.dictPop()
             else:
                 print("Error: repeat requires a body and an integer")
         else:
@@ -472,9 +509,11 @@ class Operators:
             codearray = self.opPop()
             array = self.opPop()
             if isinstance(codearray, FunctionValue) and isinstance(array, ArrayValue):
+                self.dictPush(self.dictstack.count - 1, {})
                 for item in array.value:
                     self.opPush(item)
                     codearray.apply(self)
+                self.dictPop()
             else:
                 print("Error: forall requires a body and an array")
         else:

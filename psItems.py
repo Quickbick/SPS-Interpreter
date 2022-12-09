@@ -101,7 +101,10 @@ class Name(Expr):
             resultOfName = psstacks.lookup(self.var_name)
             if (resultOfName != None):
                 if(type(resultOfName) == FunctionValue):
+                    link = psstacks.defineHelper(self.var_name)
+                    psstacks.dictPush(link, {})
                     resultOfName.apply(psstacks)
+                    psstacks.dictPop()
                 else:
                     psstacks.opPush(resultOfName)
 
