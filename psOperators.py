@@ -43,7 +43,7 @@ class Operators:
        Helper function. Pushes the given dictionary onto the dictstack. 
     """   
     def dictPush(self,link, d):
-        self.dictstack.append(link, d)
+        self.dictstack.append((link, d))
 
     """
        Helper function. Adds name:value pair to the top dictionary in the dictstack.
@@ -52,7 +52,7 @@ class Operators:
     def define(self,name, value):
         if (len(self.dictstack) == 0):
             newDict = {}
-            self.dictstack.append((0, newDict))
+            self.dictPush(0, newDict)
         dict = self.dictPop()
         dict[1][name] = value
         jdict = dict[1]

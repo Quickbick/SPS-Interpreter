@@ -93,12 +93,12 @@ class Name(Expr):
         self.var_name = var_name
 
     def evaluate(self,psstacks):
-        if (self.var_name[0] == '/'):
-            psstacks.opPush(str(self.var_name))
-        elif (self.var_name in psstacks.builtin_operators.keys()):
+        if (self.value[0] == '/'):
+            psstacks.opPush(str(self.value))
+        elif (self.value in psstacks.builtin_operators.keys()):
             psstacks.builtin_operators[self.var_name]()
         else:
-            resultOfName = psstacks.lookup(self.var_name)
+            resultOfName = psstacks.lookup(self.value)
             if (resultOfName != None):
                 if(type(resultOfName) == FunctionValue):
                     link = psstacks.defineHelper(self.var_name)
