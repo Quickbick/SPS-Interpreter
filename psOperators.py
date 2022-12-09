@@ -61,15 +61,21 @@ class Operators:
         Make sure to add '/' to the begining of the name.)
     """
     def lookup(self,name):
-        revList = reversed(self.dictstack)
-        if (self.scope == "static"):
-            revlist.head
-        else:
-            for dict in revList:
+        current = self.dictstack[-1]
+        if (self.scope == 'static'):
+            if ("/" + name) in current[1]:
+                return current[1][name]
+            while (self.dictstack[current[0]] != None) and (self.dictstack[current[0]] != current):
+                current = self.dictstack[current[0]]
+                if ("/" + name) in current[1]:
+                    return current[1][name]
+        elif (self.scope == 'dynamic'):
+            revList = reversed(self.dictstack)
+            for (link, dict) in revList:
                 if ("/" + name) in dict:
                     return dict[("/" + name)]
-            print("ERROR: Value does not exist to be looked up")
-            return None
+        print("ERROR: Value does not exist to be looked up")
+        return None
 
     
     #------- Arithmetic Operators --------------
